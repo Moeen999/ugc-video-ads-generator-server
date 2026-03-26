@@ -5,14 +5,15 @@ import cors from "cors";
 import { clerkMiddleware } from '@clerk/express'
 import clerkWebhooks from "./controllers/clerk.js";
 import * as Sentry from "@sentry/node"
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 
 app.use(cors())
-app.post("/api/clerk", express.raw({ type: 'application/json' }), clerkWebhooks)
-
 app.use(express.json());
 app.use(clerkMiddleware());
+app.post("/api/clerk", express.raw({ type: 'application/json' }), clerkWebhooks);
+app.use("/api/user", userRouter);
 
 
 const port = process.env.PORT;
@@ -22,7 +23,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("My first Sentry error!");
+    throw new Error("My first Sentry error!");
 });
 
 // The error handler must be registered before any other error middleware and after all controllers
