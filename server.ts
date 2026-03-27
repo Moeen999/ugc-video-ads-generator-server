@@ -6,6 +6,7 @@ import { clerkMiddleware } from '@clerk/express'
 import clerkWebhooks from "./controllers/clerk.js";
 import * as Sentry from "@sentry/node"
 import userRouter from "./routes/userRoutes.js";
+import projectRouter from "./routes/projectRoutes.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(clerkMiddleware());
 app.post("/api/clerk", express.raw({ type: 'application/json' }), clerkWebhooks);
 app.use("/api/user", userRouter);
+app.use("/api/project", projectRouter);
 
 
 const port = process.env.PORT;
